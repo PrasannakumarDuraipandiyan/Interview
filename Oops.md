@@ -1,134 +1,305 @@
-Here’s a list of commonly asked Object-Oriented Programming (OOP) interview questions tailored for an experienced .NET developer or technical lead. Answers are also provided to help you prepare effectively.
-
----
-
-### **General OOP Concepts**
-#### Q1: What are the four main principles of OOP?
+### **1. What are the four main principles of OOP?**
 **Answer:**
-1. **Encapsulation**: Wrapping data and methods in a single unit (class) to restrict access.
-2. **Inheritance**: Deriving new classes from existing ones to promote code reuse.
-3. **Polymorphism**: Ability to redefine methods in derived classes (overriding) or perform actions differently based on input types (overloading).
-4. **Abstraction**: Hiding implementation details and exposing only essential features through interfaces or abstract classes.
+The four main principles of OOP are:
+1. **Encapsulation**: Bundling data and methods that operate on the data within a single unit (class) and restricting access to some of the object's components.
+2. **Inheritance**: A mechanism where a new class derives properties and behavior from an existing class.
+3. **Polymorphism**: The ability of objects to take on multiple forms (e.g., method overriding and method overloading).
+4. **Abstraction**: Hiding complex implementation details and exposing only the necessary features.
 
 ---
 
-#### Q2: What is the difference between an abstract class and an interface in .NET?
+### **2. What is the difference between a class and an object in C#?**
+**Answer:**
+- A **class** is a blueprint or template that defines the structure and behavior of objects. It contains fields, properties, methods, and events.
+- An **object** is an instance of a class. It is a concrete entity created from the class blueprint.
+
+Example:
+```csharp
+class Car { } // Class
+Car myCar = new Car(); // Object
+```
+
+---
+
+### **3. What is encapsulation, and how is it achieved in C#?**
+**Answer:**
+Encapsulation is the concept of bundling data (fields) and methods (functions) that operate on the data within a single unit (class) and controlling access to the data. In C#, encapsulation is achieved using:
+- **Access modifiers** like `private`, `public`, `protected`, and `internal`.
+- **Properties** to provide controlled access to private fields.
+
+Example:
+```csharp
+class Person {
+    private string name; // Private field
+    public string Name { // Public property
+        get { return name; }
+        set { name = value; }
+    }
+}
+```
+
+---
+
+### **4. What is inheritance, and how does it work in C#?**
+**Answer:**
+Inheritance is a mechanism where a new class (derived class) inherits properties and behavior from an existing class (base class). In C#, inheritance is achieved using the `:` symbol.
+
+Example:
+```csharp
+class Animal { // Base class
+    public void Eat() {
+        Console.WriteLine("Eating...");
+    }
+}
+class Dog : Animal { } // Derived class
+```
+
+---
+
+### **5. What is polymorphism, and how is it implemented in C#?**
+**Answer:**
+Polymorphism allows objects to take on multiple forms. In C#, it is implemented using:
+- **Method Overriding**: Using the `virtual` keyword in the base class and `override` in the derived class.
+- **Method Overloading**: Defining multiple methods with the same name but different parameters.
+
+Example of Method Overriding:
+```csharp
+class Animal {
+    public virtual void Sound() {
+        Console.WriteLine("Animal sound");
+    }
+}
+class Dog : Animal {
+    public override void Sound() {
+        Console.WriteLine("Bark");
+    }
+}
+```
+
+---
+
+### **6. What is abstraction, and how is it achieved in C#?**
+**Answer:**
+Abstraction is the concept of hiding complex implementation details and exposing only the necessary features. In C#, abstraction is achieved using:
+- **Abstract classes**: Classes that cannot be instantiated and can contain abstract methods.
+- **Interfaces**: Contracts that define a set of methods without implementation.
+
+Example:
+```csharp
+abstract class Shape {
+    public abstract void Draw(); // Abstract method
+}
+class Circle : Shape {
+    public override void Draw() {
+        Console.WriteLine("Drawing Circle");
+    }
+}
+```
+
+---
+
+### **7. What is the difference between an abstract class and an interface in C#?**
 **Answer:**
 - **Abstract Class**:
-  - Can have both abstract and concrete methods.
-  - Supports constructors.
-  - Can include fields.
-  - Can implement methods.
+  - Can have both abstract and non-abstract methods.
+  - Can contain fields, properties, and constructors.
+  - Supports access modifiers.
+  - A class can inherit only one abstract class.
 - **Interface**:
-  - Cannot have implementation (up to .NET Framework; default implementations allowed in .NET Core 3.0+).
-  - Cannot include fields or constructors.
-  - Used to define contracts that classes must implement.
+  - Can only have method signatures (no implementation until C# 8.0).
+  - Cannot contain fields or constructors.
+  - All members are public by default.
+  - A class can implement multiple interfaces.
 
 ---
 
-#### Q3: How does method overloading differ from method overriding?
+### **8. What is method overloading in C#?**
 **Answer:**
-- **Method Overloading**:
-  - Happens within the same class.
-  - Involves methods with the same name but different parameter lists.
-  - Compile-time polymorphism.
-- **Method Overriding**:
-  - Requires inheritance.
-  - Involves methods with the same name and signature in the base and derived classes.
-  - Runtime polymorphism (requires `virtual`, `override`, or `abstract` keywords in .NET).
+Method overloading is the ability to define multiple methods with the same name but different parameters (type, number, or order). It is a form of compile-time polymorphism.
+
+Example:
+```csharp
+class Math {
+    public int Add(int a, int b) { return a + b; }
+    public double Add(double a, double b) { return a + b; }
+}
+```
 
 ---
 
-#### Q4: Can you explain the difference between `IS-A` and `HAS-A` relationships?
+### **9. What is method overriding in C#?**
 **Answer:**
-- **IS-A**: Represents inheritance; a subclass is a type of its parent class (e.g., Dog IS-A Animal).
-- **HAS-A**: Represents composition; a class contains another class as a member (e.g., Car HAS-A Engine).
+Method overriding is the ability of a derived class to provide a specific implementation of a method that is already defined in its base class. It is achieved using the `virtual` keyword in the base class and the `override` keyword in the derived class.
+
+Example:
+```csharp
+class Animal {
+    public virtual void Sound() {
+        Console.WriteLine("Animal sound");
+    }
+}
+class Dog : Animal {
+    public override void Sound() {
+        Console.WriteLine("Bark");
+    }
+}
+```
 
 ---
 
-### **.NET-Specific OOP Questions**
-#### Q5: What is the difference between a class and a struct in .NET?
+### **10. What is the difference between `virtual` and `abstract` methods in C#?**
+**Answer:**
+- **Virtual Method**:
+  - Has a default implementation in the base class.
+  - Can be overridden in the derived class using the `override` keyword.
+- **Abstract Method**:
+  - Does not have an implementation in the base class.
+  - Must be overridden in the derived class.
+
+---
+
+### **11. What is a sealed class in C#?**
+**Answer:**
+A sealed class is a class that cannot be inherited. It is defined using the `sealed` keyword.
+
+Example:
+```csharp
+sealed class Animal { }
+// class Dog : Animal { } // Error: Cannot inherit from sealed class
+```
+
+---
+
+### **12. What is a constructor, and what are its types in C#?**
+**Answer:**
+A constructor is a special method used to initialize an object. Types of constructors in C# include:
+1. **Default Constructor**: No parameters.
+2. **Parameterized Constructor**: Takes parameters.
+3. **Static Constructor**: Initializes static members.
+4. **Copy Constructor**: Initializes an object using another object of the same class.
+
+Example:
+```csharp
+class Person {
+    public Person() { } // Default constructor
+    public Person(string name) { } // Parameterized constructor
+}
+```
+
+---
+
+### **13. What is the difference between `struct` and `class` in C#?**
 **Answer:**
 - **Class**:
   - Reference type.
-  - Stored in heap memory.
   - Supports inheritance.
+  - Can have a destructor.
 - **Struct**:
   - Value type.
-  - Stored in stack memory.
-  - Cannot inherit other classes (but can implement interfaces).
+  - Does not support inheritance.
+  - Cannot have a destructor.
 
 ---
 
-#### Q6: How does garbage collection affect objects in .NET?
+### **14. What is the `this` keyword in C#?**
 **Answer:**
-- Garbage collection automatically manages memory by reclaiming objects no longer in use.
-- Objects in the heap are tracked by generations (0, 1, 2). The garbage collector optimizes cleanup based on these generations.
-- Finalizers (`~ClassName`) can be overridden for cleanup, but they introduce overhead.
+The `this` keyword refers to the current instance of the class. It is used to:
+- Differentiate between class fields and parameters with the same name.
+- Pass the current object as a parameter to another method.
+
+Example:
+```csharp
+class Person {
+    private string name;
+    public Person(string name) {
+        this.name = name; // 'this' refers to the current instance
+    }
+}
+```
 
 ---
 
-#### Q7: How is polymorphism implemented in C#?
+### **15. What is the `base` keyword in C#?**
 **Answer:**
-Polymorphism can be implemented using:
-1. **Method Overloading** (Compile-time): Multiple methods with the same name but different parameter types.
-2. **Method Overriding** (Runtime): Using `virtual` in the base class and `override` in the derived class.
-3. **Interfaces and Abstract Classes**: Allow substituting derived types at runtime.
+The `base` keyword is used to access members of the base class from within a derived class. It is commonly used to call the base class constructor.
+
+Example:
+```csharp
+class Animal {
+    public Animal(string name) { }
+}
+class Dog : Animal {
+    public Dog(string name) : base(name) { } // Calls base class constructor
+}
+```
 
 ---
 
-### **Advanced Concepts**
-#### Q8: What is dependency injection, and how does it relate to OOP?
+### **16. What is a destructor in C#?**
 **Answer:**
-- Dependency Injection (DI) is a design pattern to achieve Inversion of Control (IoC).
-- Instead of creating dependencies directly, they are provided to the class externally (e.g., through constructors or properties).
-- Promotes abstraction, reduces coupling, and simplifies testing.
+A destructor is a special method used to release unmanaged resources before an object is destroyed. It is defined using the `~` symbol.
+
+Example:
+```csharp
+class Person {
+    ~Person() { // Destructor
+        // Cleanup code
+    }
+}
+```
 
 ---
 
-#### Q9: Can you explain SOLID principles in the context of .NET development?
+### **17. What is the difference between `is` and `as` operators in C#?**
 **Answer:**
-1. **S**ingle Responsibility Principle: A class should have one and only one reason to change.
-2. **O**pen/Closed Principle: Classes should be open for extension but closed for modification.
-3. **L**iskov Substitution Principle: Subtypes should be substitutable for their base types without altering functionality.
-4. **I**nterface Segregation Principle: No client should be forced to depend on methods it does not use.
-5. **D**ependency Inversion Principle: Depend on abstractions, not on concrete implementations.
+- **`is`**: Checks if an object is of a specific type and returns a boolean.
+- **`as`**: Attempts to cast an object to a specific type and returns `null` if the cast fails.
+
+Example:
+```csharp
+if (obj is Person) { } // 'is' operator
+Person p = obj as Person; // 'as' operator
+```
 
 ---
 
-#### Q10: How is `sealed` used in .NET, and what are its implications?
+### **18. What is a partial class in C#?**
 **Answer:**
-- The `sealed` keyword prevents a class from being inherited.
-- Often used to restrict further modification or when a class is designed for specific use cases.
-- Example:
-  ```csharp
-  public sealed class FinalClass {
-      // Code
-  }
-  ```
+A partial class allows a class definition to be split across multiple files. It is defined using the `partial` keyword.
+
+Example:
+```csharp
+// File1.cs
+partial class Person {
+    public void Method1() { }
+}
+// File2.cs
+partial class Person {
+    public void Method2() { }
+}
+```
 
 ---
 
-#### Q11: What is the difference between shallow copy and deep copy?
+### **19. What is a static class in C#?**
 **Answer:**
-- **Shallow Copy**: Copies the object’s references, not the actual objects they refer to.
-- **Deep Copy**: Creates an entirely new copy of the object and all objects it references.
+A static class is a class that cannot be instantiated and can only contain static members. It is defined using the `static` keyword.
+
+Example:
+```csharp
+static class Math {
+    public static int Add(int a, int b) { return a + b; }
+}
+```
 
 ---
 
-#### Q12: What are extension methods in C#? How are they related to OOP?
+### **20. What is the difference between `IEnumerable` and `IQueryable` in C#?**
 **Answer:**
-- Extension methods allow adding new methods to existing types without modifying their source code.
-- They support the principle of **open/closed** by extending functionality without altering the original implementation.
-- Example:
-  ```csharp
-  public static class StringExtensions {
-      public static bool IsEmpty(this string str) {
-          return string.IsNullOrWhiteSpace(str);
-      }
-  }
-  ```
+- **`IEnumerable`**:
+  - Used for in-memory collections.
+  - Executes queries on the client side (LINQ to Objects).
+- **`IQueryable`**:
+  - Used for querying data from out-of-memory sources (e.g., databases).
+  - Executes queries on the server side (LINQ to Entities).
 
----
-
-Would you like examples, coding tasks, or more advanced questions on a specific topic?
