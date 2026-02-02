@@ -1,0 +1,128 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 1000,
+  "height": 350,
+  "padding": 20,
+
+  "data": [
+    {
+      "name": "nodes",
+      "source": "dataset",
+      "transform": [
+        {
+          "type": "fold",
+          "fields": ["Category", "SubCategory"],
+          "as": ["role", "label"]
+        },
+        {
+          "type": "aggregate",
+          "groupby": ["label"],
+          "fields": ["Measure"],
+          "ops": ["max"],
+          "as": ["value"]
+        },
+        {
+          "type": "window",
+          "ops": ["row_number"],
+          "as": ["id"],
+          "sort": [{"field": "label"}]
+        },
+        {
+          "type": "formula",
+          "as": "x",
+          "expr": "datum.id * 140"
+        },
+        {
+          "type": "formula",
+          "as": "y",
+          "expr": "160"
+        }
+      ]
+    },
+    {
+      "name": "links",
+      "source": "dataset",
+      "transform": [
+        {
+          "type": "lookup",
+          "from": "nodes",
+          "key": "label",
+          "fields": ["Category"],
+          "as": ["fromNode"]
+        },
+        {
+          "type": "lookup",
+          "from": "nodes",
+          "key": "label",
+          "fields": ["SubCategory"],
+          "as": ["toNode"]
+        }
+      ]
+    }
+  ],
+
+  "scales": [
+    {
+      "name": "color",
+      "type": "linear",
+      "domain": {"data": "nodes", "field": "value"},
+      "range": ["#bbdefb", "#c62828"]
+    }
+  ],
+
+  "marks": [
+
+    {
+      "type": "path",
+      "from": {"data": "links"},
+      "encode": {
+        "update": {
+          "path": {
+            "signal":
+              "M " +
+              "datum.fromNode.x + ' ' +
+              "datum.fromNode.y +
+              " L " +
+              "datum.toNode.x + ' ' +
+              "datum.toNode.y"
+          },
+          "stroke": {"value": "#555"},
+          "strokeWidth": {"value": 2}
+        }
+      }
+    },
+
+    {
+      "type": "rect",
+      "from": {"data": "nodes"},
+      "encode": {
+        "update": {
+          "x": {"field": "x"},
+          "y": {"field": "y"},
+          "width": {"value": 120},
+          "height": {"value": 60},
+          "cornerRadius": {"value": 12},
+          "fill": {"scale": "color", "field": "value"},
+          "stroke": {"value": "#333"}
+        }
+      }
+    },
+
+    {
+      "type": "text",
+      "from": {"data": "nodes"},
+      "encode": {
+        "update": {
+          "x": {"field": "x", "offset": 60},
+          "y": {"field": "y", "offset": 35},
+          "align": {"value": "center"},
+          "baseline": {"value": "middle"},
+          "text": {"field": "label"},
+          "fontSize": {"value": 12},
+          "fontWeight": {"value": "bold"},
+          "fill": {"value": "#000"}
+        }
+      }
+    }
+  ]
+}
